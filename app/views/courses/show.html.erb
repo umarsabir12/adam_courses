@@ -1,0 +1,85 @@
+<div class="container mx-auto px-4 py-6">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-6">
+      <%= link_to "← Back to Courses", courses_path, 
+          class: "text-blue-600 hover:text-blue-800" %>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-sm border border-blue-200 overflow-hidden">
+      <% if @course.image_url.present? %>
+        <img src="<%= @course.image_url %>" alt="<%= @course.name %>" class="w-full h-64 object-cover">
+      <% else %>
+        <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+          <span class="text-gray-500 text-xl">No Image Available</span>
+        </div>
+      <% end %>
+      
+      <div class="p-6">
+        <div class="flex justify-between items-start mb-4">
+          <h1 class="text-3xl font-bold text-gray-900"><%= @course.name %></h1>
+          <span class="px-3 py-1 text-sm rounded <%= @course.status == 'publish' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
+            <%= @course.status.titleize %>
+          </span>
+        </div>
+        
+        <div class="flex items-center gap-4 mb-6">
+          <span class="text-2xl font-bold text-blue-600">$<%= @course.price %></span>
+          <% if @course.sku.present? %>
+            <span class="text-gray-600">SKU: <%= @course.sku %></span>
+          <% end %>
+        </div>
+        
+        <% if @course.description.present? %>
+          <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-3">Description</h2>
+            <div class="prose max-w-none">
+              <%= raw @course.description %>
+            </div>
+          </div>
+        <% end %>
+        
+        <div class="flex gap-4">
+          <% if @course.permalink.present? %>
+            <%= link_to "View on Website", @course.permalink, 
+                target: "_blank", 
+                class: "px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700" %>
+          <% end %>
+          <%= link_to "Edit Course", "#", 
+              class: "px-6 py-3 border border-blue-300 text-blue-700 rounded hover:bg-blue-50" %>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-8 bg-gray-50 rounded-lg p-6">
+      <h3 class="text-lg font-semibold mb-4">Course Details</h3>
+      <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <dt class="font-medium text-gray-700">WooCommerce ID</dt>
+          <dd class="text-gray-900"><%= @course.woocommerce_id %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-700">Status</dt>
+          <dd class="text-gray-900"><%= @course.status.titleize %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-700">Price</dt>
+          <dd class="text-gray-900">$<%= @course.price %></dd>
+        </div>
+        <% if @course.sku.present? %>
+          <div>
+            <dt class="font-medium text-gray-700">SKU</dt>
+            <dd class="text-gray-900"><%= @course.sku %></dd>
+          </div>
+        <% end %>
+        <div>
+          <dt class="font-medium text-gray-700">Created</dt>
+          <dd class="text-gray-900"><%= @course.created_at.strftime("%B %d, %Y at %I:%M %p") %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-700">Updated</dt>
+          <dd class="text-gray-900"><%= @course.updated_at.strftime("%B %d, %Y at %I:%M %p") %></dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>

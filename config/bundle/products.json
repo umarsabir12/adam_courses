@@ -1,0 +1,12 @@
+[
+  {"sku":"COURSE_AVOIDANT_MAN","title":"How to Love an Avoidant Man","type":"course","imageUrl":"/img/avoidant.jpg","summary":"A step-by-step course to...","msrp":1000.0,"countsTowardThreshold":true,"giftEligible":false,"visible":true,"sortOrder":10},
+  {"sku":"COURSE_SECURE_MARRIAGE","title":"Secure Marriage Course","type":"course","imageUrl":"/img/secure_marriage.jpg","summary":"Build a secure marriage...","msrp":1000.0,"countsTowardThreshold":true,"giftEligible":false,"visible":true,"sortOrder":20},
+  {"sku":"COURSE_BOOTCAMP","title":"Attachment Bootcamp","type":"course","imageUrl":"/img/bootcamp.jpg","summary":"Intensive bootcamp...","msrp":1000.0,"countsTowardThreshold":true,"giftEligible":false,"visible":true,"sortOrder":30},
+  {"sku":"GUIDE_4_STYLES","title":"Guide: 4 Attachment Styles","type":"gift","imageUrl":"/img/guide_4_styles.jpg","summary":"Understand the 4 styles...","msrp":49.0,"countsTowardThreshold":false,"giftEligible":true,"visible":true,"sortOrder":110},
+  {"sku":"GUIDE_BOND_AVOIDANT","title":"Guide: Bond with an Avoidant","type":"gift","imageUrl":"/img/guide_bond_avoidant.jpg","summary":"Bond better...","msrp":49.0,"countsTowardThreshold":false,"giftEligible":true,"visible":true,"sortOrder":120},
+  {"sku":"MINI_TALK_AVOIDANT","title":"Mini Talk: Avoidant Partner","type":"gift","imageUrl":"/img/mini_talk_avoidant.jpg","summary":"Quick insights...","msrp":29.0,"countsTowardThreshold":false,"giftEligible":true,"visible":true,"sortOrder":130},
+  {"sku":"CARDS_50","title":"50 Conversation Cards","type":"gift","imageUrl":"/img/cards_50.jpg","summary":"Great prompts...","msrp":29.0,"countsTowardThreshold":false,"giftEligible":true,"visible":true,"sortOrder":140},
+  {"sku":"ASSESSMENT_ATTACHMENT","title":"Attachment Assessment","type":"gift","imageUrl":"/img/assessment.jpg","summary":"Discover your style...","msrp":149.0,"countsTowardThreshold":false,"giftEligible":true,"visible":true,"sortOrder":150}
+]
+
+

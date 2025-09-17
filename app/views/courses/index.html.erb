@@ -1,0 +1,71 @@
+<div class="container mx-auto px-4 py-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-900">Courses</h1>
+    <%= form_with url: sync_courses_path, method: :post, local: true, class: "inline" do |form| %>
+      <%= form.submit "Sync from WooCommerce", 
+          class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700",
+          data: { confirm: "This will sync all products from WooCommerce. Continue?" } %>
+    <% end %>
+  </div>
+  
+  <% if flash[:notice] %>
+    <div class="mb-4 p-4 bg-green-50 border border-green-200 rounded text-green-800">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <% @courses.each do |course| %>
+      <div class="bg-white rounded-lg shadow-sm border border-blue-200 overflow-hidden">
+        <% if course.image_url.present? %>
+          <img src="<%= course.image_url %>" alt="<%= course.name %>" class="w-full h-48 object-cover">
+        <% else %>
+          <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+            <span class="text-gray-500">No Image</span>
+          </div>
+        <% end %>
+        
+        <div class="p-4">
+          <h3 class="font-semibold text-lg mb-2"><%= course.name %></h3>
+          
+          <% if course.description.present? %>
+            <p class="text-gray-600 text-sm mb-3 line-clamp-3">
+              <%= truncate(strip_tags(course.description), length: 120) %>
+            </p>
+          <% end %>
+          
+          <div class="flex justify-between items-center mb-3">
+            <span class="text-lg font-bold text-blue-600">$<%= course.price %></span>
+            <span class="px-2 py-1 text-xs rounded <%= course.status == 'publish' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
+              <%= course.status.titleize %>
+            </span>
+          </div>
+          
+          <% if course.sku.present? %>
+            <p class="text-xs text-gray-500 mb-2">SKU: <%= course.sku %></p>
+          <% end %>
+          
+          <div class="flex gap-2">
+            <%= link_to "View Details", course_path(course), 
+                class: "flex-1 px-3 py-2 bg-blue-600 text-white text-center rounded hover:bg-blue-700" %>
+            <% if course.permalink.present? %>
+              <%= link_to "View on Site", course.permalink, 
+                  target: "_blank", 
+                  class: "px-3 py-2 border border-blue-300 text-blue-700 rounded hover:bg-blue-50" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  
+  <% if @courses.empty? %>
+    <div class="text-center py-12">
+      <p class="text-gray-500 text-lg mb-4">No courses found.</p>
+      <%= form_with url: sync_courses_path, method: :post, local: true, class: "inline" do |form| %>
+        <%= form.submit "Sync Courses from WooCommerce", 
+            class: "px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

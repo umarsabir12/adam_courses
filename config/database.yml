@@ -1,0 +1,30 @@
+# PostgreSQL configuration
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+development:
+  <<: *default
+  database: adam_courses_development
+  username: <%= ENV.fetch("DATABASE_USERNAME") { "tronsit" } %>
+  password: <%= ENV.fetch("DATABASE_PASSWORD") { "" } %>
+  host: <%= ENV.fetch("DATABASE_HOST") { "localhost" } %>
+  port: <%= ENV.fetch("DATABASE_PORT") { "5432" } %>
+
+test:
+  <<: *default
+  database: adam_courses_test
+  username: <%= ENV.fetch("DATABASE_USERNAME") { "tronsit" } %>
+  password: <%= ENV.fetch("DATABASE_PASSWORD") { "" } %>
+  host: <%= ENV.fetch("DATABASE_HOST") { "localhost" } %>
+  port: <%= ENV.fetch("DATABASE_PORT") { "5432" } %>
+
+production:
+  <<: *default
+  database: adam_courses_production
+  username: <%= ENV.fetch("DATABASE_USERNAME") { "tronsit" } %>
+  password: <%= ENV.fetch("DATABASE_PASSWORD") { "" } %>
+  host: <%= ENV.fetch("DATABASE_HOST") { "localhost" } %>
+  port: <%= ENV.fetch("DATABASE_PORT") { "5432" } %>

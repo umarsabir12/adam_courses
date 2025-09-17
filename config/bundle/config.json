@@ -1,0 +1,43 @@
+{
+  "ruleVersion": "2025.10.01",
+  "tiers": [
+    {
+      "minCourses": 2,
+      "percentOff": 40,
+      "scope": "courses_only",
+      "giftCount": 1,
+      "giftPoolSkus": [
+        "GUIDE_4_STYLES",
+        "MINI_TALK_AVOIDANT",
+        "GUIDE_BOND_AVOIDANT",
+        "CARDS_50"
+      ]
+    },
+    {
+      "minCourses": 3,
+      "percentOff": 50,
+      "scope": "entire_cart",
+      "giftCount": 3,
+      "giftPoolSkus": [
+        "GUIDE_4_STYLES",
+        "MINI_TALK_AVOIDANT",
+        "GUIDE_BOND_AVOIDANT",
+        "CARDS_50",
+        "ASSESSMENT_ATTACHMENT"
+      ]
+    }
+  ],
+  "upsell": {
+    "enabled": true,
+    "sku": "BUNDLE_COMPLETE_ALL",
+    "price": 200.0,
+    "timerMinutes": 15
+  },
+  "flags": {
+    "bundlePromoEnabled": true,
+    "otoEnabled": true,
+    "roundingMode": "half_up"
+  }
+}
+
+
