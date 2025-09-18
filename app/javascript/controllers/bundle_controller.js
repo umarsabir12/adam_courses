@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="bundle"
 export default class extends Controller {
   static targets = [
-    "catalog", "offerHeader", "progress", "lineItems",
+    "coursesCatalog", "extrasCatalog", "offerHeader", "progress", "lineItems",
     "subtotal", "discount", "total", "youSave",
     "giftButton", "giftModalOverlay", "giftGrid", "giftRemaining"
   ]
@@ -12,6 +12,8 @@ export default class extends Controller {
     this.items = []
     this.selectedGifts = []
     this.catalog = []
+    this.courses = []
+    this.extras = []
     this.config = {}
     this.debouncedPrice = this.debounce(() => this.price(), 200)
     this.loadCatalog()
@@ -22,16 +24,19 @@ export default class extends Controller {
     const data = await res.json()
     this.catalog = data.products
     this.config = data.config
+    this.courses = this.catalog.filter(p => p.type === 'course' && (p.visible !== false))
+    this.extras = this.catalog.filter(p => p.type !== 'course' && (p.visible !== false))
     this.renderCatalog()
     this.updateUi()
   }
 
   renderCatalog() {
-    this.catalogTarget.innerHTML = ''
-    this.catalog.forEach(p => {
+    // Courses
+    this.coursesCatalogTarget.innerHTML = ''
+    this.courses.forEach(p => {
       const selected = this.items.includes(p.sku)
       const card = document.createElement('div')
-      card.className = 'bg-white rounded-xl shadow-sm border border-blue-200 hover:shadow-md transition overflow-hidden'
+      card.className = 'bg-white rounded-xl shadow-sm border border-orange-200 hover:shadow-md transition overflow-hidden'
       card.innerHTML = `
         <div class="aspect-[4/3] bg-gray-100 overflow-hidden">
           <img src="${p.imageUrl}" alt="${p.title}" class="w-full h-full object-cover" loading="lazy" />
@@ -42,18 +47,48 @@ export default class extends Controller {
           <div class="mt-2 flex items-center justify-between">
             <div class="text-sm font-medium">$${p.msrp.toFixed(2)}</div>
             <div class="flex gap-1">
-              ${p.type === 'course' ? '<span class="px-2 py-0.5 text-[11px] bg-blue-50 text-blue-700 rounded">Course</span>' : ''}
+              ${p.type === 'course' ? '<span class="px-2 py-0.5 text-[11px] bg-orange-50 text-orange-700 rounded">Course</span>' : ''}
               ${p.type === 'addon' ? '<span class="px-2 py-0.5 text-[11px] bg-slate-50 text-slate-700 rounded">Add-on</span>' : ''}
               ${p.type === 'gift' ? '<span class="px-2 py-0.5 text-[11px] bg-emerald-50 text-emerald-700 rounded">Gift</span>' : ''}
             </div>
           </div>
-          <button class="mt-3 w-full px-3 py-2 rounded text-sm font-medium border ${selected ? 'bg-blue-600 text-white border-blue-600' : 'border-blue-300 text-blue-700 hover:bg-blue-50'}" data-sku="${p.sku}">
+          <button class="mt-3 w-full px-3 py-2 rounded text-sm font-medium border ${selected ? 'bg-orange-600 text-white border-orange-600' : 'border-orange-300 text-orange-700 hover:bg-orange-50'}" data-sku="${p.sku}">
             ${selected ? 'Remove' : 'Add to bundle'}
           </button>
         </div>
       `
       card.querySelector('button').addEventListener('click', () => this.toggle(p.sku))
-      this.catalogTarget.appendChild(card)
+      this.coursesCatalogTarget.appendChild(card)
+    })
+
+    // Extras (Downloads & Add-ons & Gifts)
+    this.extrasCatalogTarget.innerHTML = ''
+    this.extras.forEach(p => {
+      const selected = this.items.includes(p.sku)
+      const card = document.createElement('div')
+      card.className = 'bg-white rounded-xl shadow-sm border border-orange-200 hover:shadow-md transition overflow-hidden'
+      card.innerHTML = `
+        <div class="aspect-[4/3] bg-gray-100 overflow-hidden">
+          <img src="${p.imageUrl}" alt="${p.title}" class="w-full h-full object-cover" loading="lazy" />
+        </div>
+        <div class="p-3">
+          <div class="font-semibold leading-snug">${p.title}</div>
+          <div class="text-sm text-gray-600 line-clamp-2">${p.summary || ''}</div>
+          <div class="mt-2 flex items-center justify-between">
+            <div class="text-sm font-medium">$${p.msrp.toFixed(2)}</div>
+            <div class="flex gap-1">
+              ${p.type === 'course' ? '<span class="px-2 py-0.5 text-[11px] bg-orange-50 text-orange-700 rounded">Course</span>' : ''}
+              ${p.type === 'addon' ? '<span class="px-2 py-0.5 text-[11px] bg-slate-50 text-slate-700 rounded">Add-on</span>' : ''}
+              ${p.type === 'gift' ? '<span class="px-2 py-0.5 text-[11px] bg-emerald-50 text-emerald-700 rounded">Gift</span>' : ''}
+            </div>
+          </div>
+          <button class="mt-3 w-full px-3 py-2 rounded text-sm font-medium border ${selected ? 'bg-orange-600 text-white border-orange-600' : 'border-orange-300 text-orange-700 hover:bg-orange-50'}" data-sku="${p.sku}">
+            ${selected ? 'Remove' : 'Add to bundle'}
+          </button>
+        </div>
+      `
+      card.querySelector('button').addEventListener('click', () => this.toggle(p.sku))
+      this.extrasCatalogTarget.appendChild(card)
     })
   }
 
@@ -103,7 +138,7 @@ export default class extends Controller {
         liEl.className = 'py-2 flex items-center justify-between gap-2'
         const price = li.isGift ? '$0.00' : `$${li.net.toFixed(2)}`
         const msrp = li.discount > 0 ? `<span class="line-through text-gray-400 mr-1">$${li.msrp.toFixed(2)}</span>` : ''
-        const disc = li.discount > 0 ? `<span class="text-blue-700 mr-1">- $${li.discount.toFixed(2)}</span>` : ''
+        const disc = li.discount > 0 ? `<span class="text-orange-700 mr-1">- $${li.discount.toFixed(2)}</span>` : ''
         liEl.innerHTML = `
           <div>
             <div class="text-sm">${li.title}</div>
@@ -142,7 +177,7 @@ export default class extends Controller {
       if (!p) return
       const selected = this.selectedGifts.includes(sku)
       const el = document.createElement('button')
-      el.className = `border rounded p-2 text-left ${selected ? 'ring-2 ring-blue-500' : ''}`
+      el.className = `border rounded p-2 text-left ${selected ? 'ring-2 ring-orange-500' : ''}`
       el.innerHTML = `
         <img src="${p.imageUrl}" alt="" class="w-full h-24 object-cover rounded" />
         <div class="mt-2 text-sm">${p.title}</div>

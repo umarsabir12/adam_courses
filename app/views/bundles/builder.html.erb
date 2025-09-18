@@ -1,26 +1,36 @@
-<div class="container mx-auto px-4 py-6" data-controller="bundle">
-  <div class="mb-4 p-3 bg-blue-50 rounded border border-blue-200" aria-live="polite">
-    <div class="text-sm text-blue-800" data-bundle-target="offerHeader">Build your bundle. Watch your savings grow.</div>
-  </div>
+    <div class="container mx-auto px-4 py-6" data-controller="bundle">
+      <div class="mb-4 p-3 bg-orange-50 rounded border border-orange-200" aria-live="polite">
+        <div class="text-sm text-orange-800" data-bundle-target="offerHeader">Build your bundle. Watch your savings grow.</div>
+      </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <div class="lg:col-span-2">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="catalog" data-bundle-target="catalog"></div>
+    <div class="lg:col-span-2 space-y-8">
+      <section>
+        <h2 class="text-3xl text-gray-900">Courses</h2>
+        <p class="text-sm text-gray-600 mt-1">These count towards your bundle discounts</p>
+        <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="coursesCatalog" data-bundle-target="coursesCatalog"></div>
+      </section>
+
+      <section>
+        <h2 class="text-3xl text-gray-900">Downloads and add-ons</h2>
+        <p class="text-sm text-gray-600 mt-1">Choose gifts (free with bundles) or purchase separately.</p>
+        <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="extrasCatalog" data-bundle-target="extrasCatalog"></div>
+      </section>
     </div>
     <aside class="lg:col-span-1">
-      <div class="sticky top-4 p-4 border border-blue-200 rounded shadow-sm bg-white" data-bundle-target="cartPanel">
+      <div class="sticky top-4 p-4 border border-orange-200 rounded shadow-sm bg-white" data-bundle-target="cartPanel">
         <h2 class="font-semibold mb-3">Your bundle</h2>
         <div class="text-sm text-gray-600 mb-2" data-bundle-target="progress"></div>
         <ul class="divide-y" data-bundle-target="lineItems"></ul>
         <div class="mt-4 space-y-1 text-sm">
           <div class="flex justify-between"><span>Subtotal</span><span data-bundle-target="subtotal">$0.00</span></div>
-          <div class="flex justify-between text-blue-700"><span>Discounts</span><span data-bundle-target="discount">-$0.00</span></div>
+          <div class="flex justify-between text-orange-700"><span>Discounts</span><span data-bundle-target="discount">-$0.00</span></div>
           <div class="flex justify-between font-semibold text-gray-900"><span>Order total</span><span data-bundle-target="total">$0.00</span></div>
           <div class="text-xs text-gray-500">You save <span data-bundle-target="youSave">$0 (0%)</span></div>
         </div>
         <div class="mt-4 flex gap-2">
-          <button class="px-3 py-2 border border-blue-300 text-blue-700 hover:bg-blue-50 rounded" data-action="bundle#openGifts" data-bundle-target="giftButton" disabled>Choose your gifts</button>
-          <button class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded" data-action="bundle#proceed" disabled>Proceed to checkout</button>
+          <button class="px-3 py-2 border border-orange-600 text-orange-600 hover:bg-orange-50 rounded" data-action="bundle#openGifts" data-bundle-target="giftButton" disabled>Choose your gifts</button>
+          <button class="px-3 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded" data-action="bundle#proceed" disabled>Proceed to checkout</button>
         </div>
       </div>
     </aside>
@@ -28,13 +38,13 @@
 
   <div class="fixed inset-0 bg-black/50 hidden" data-bundle-target="giftModalOverlay" aria-hidden="true">
     <div class="absolute inset-x-0 bottom-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[720px] bg-white rounded-t md:rounded shadow-lg">
-      <div class="p-4 border-b border-blue-200 flex items-center justify-between">
+      <div class="p-4 border-b border-orange-200 flex items-center justify-between">
         <h3 class="font-semibold">Pick your free gifts (<span data-bundle-target="giftRemaining">0</span> left)</h3>
         <button class="text-gray-500" data-action="bundle#closeGifts">✕</button>
       </div>
       <div class="p-4 grid grid-cols-2 md:grid-cols-3 gap-3" data-bundle-target="giftGrid"></div>
-      <div class="p-4 border-t border-blue-200 flex justify-end">
-        <button class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded" data-action="bundle#closeGifts">Done</button>
+      <div class="p-4 border-t border-orange-200 flex justify-end">
+        <button class="px-3 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded" data-action="bundle#closeGifts">Done</button>
       </div>
     </div>
   </div>

@@ -6,6 +6,9 @@ gem "rails", "~> 8.0.2", ">= 8.0.2.1"
 gem "propshaft"
 # Use PostgreSQL as the database for Active Record
 gem "pg", "~> 1.1"
+
+ruby '3.2.2'
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
