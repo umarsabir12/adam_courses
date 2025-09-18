@@ -22,9 +22,18 @@ test:
   port: <%= ENV.fetch("DATABASE_PORT") { "5432" } %>
 
 production:
-  <<: *default
-  database: adam_courses_production
-  username: <%= ENV.fetch("DATABASE_USERNAME") { "tronsit" } %>
-  password: <%= ENV.fetch("DATABASE_PASSWORD") { "" } %>
-  host: <%= ENV.fetch("DATABASE_HOST") { "localhost" } %>
-  port: <%= ENV.fetch("DATABASE_PORT") { "5432" } %>
+  primary:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+
+  cache:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+
+  queue:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+
+  cable:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
