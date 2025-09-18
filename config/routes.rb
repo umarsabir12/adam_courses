@@ -13,6 +13,11 @@ Rails.application.routes.draw do
   root "bundles#builder"
   get 'bundle', to: 'bundles#builder'
   
+  resource :checkout, only: [:show, :create], controller: 'checkouts'
+
+  get 'payments', to: 'payments#index'
+  post 'payments/create_session', to: 'payments#create_session'
+
   resources :courses, only: [:index, :show] do
     collection do
       post :sync

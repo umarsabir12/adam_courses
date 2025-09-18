@@ -1,0 +1,63 @@
+<div class="mt-6">
+<%= link_to "← Back to Builder", bundle_path, class: "text-orange-700 hover:text-orange-800" %>
+</div>
+</div>
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-semibold text-gray-900 mb-6 text-center">Review & Pay</h1>
+
+  <% items = Array(@payload && (@payload[:items] || @payload['items'])) %>
+  <% totals = (@payload && (@payload[:totals] || @payload['totals'])) || {} %>
+
+  <div class="max-w-3xl mx-auto">
+    <div class="bg-white rounded-xl border border-orange-200">
+        <div class="p-4 border-b border-orange-200 font-medium">Your items</div>
+        <ul class="divide-y">
+          <% items.each do |li| %>
+            <li class="p-4 flex items-start justify-between gap-3">
+              <div>
+                <div class="font-medium"><%= li['title'] || li[:title] %></div>
+                <div class="text-xs text-gray-500"><%= Array(li['badges'] || li[:badges]).join(', ') %></div>
+              </div>
+              <div class="text-sm">
+                <% msrp = (li['msrp'] || li[:msrp]).to_f %>
+                <% discount = (li['discount'] || li[:discount]).to_f %>
+                <% net = (li['net'] || li[:net]).to_f %>
+                <% if discount > 0 %>
+                  <span class="line-through text-gray-400 mr-1">$<%= sprintf('%.2f', msrp) %></span>
+                  <span class="text-orange-700 mr-1">- $<%= sprintf('%.2f', discount) %></span>
+                <% end %>
+                <strong>$<%= sprintf('%.2f', net) %></strong>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+      
+      <div class="mt-4 bg-white rounded-xl border border-orange-200 p-4">
+        <div class="space-y-1 text-sm">
+          <% subtotal = (totals['subtotal'] || totals[:subtotal] || 0).to_f %>
+          <% discount = (totals['discount'] || totals[:discount] || 0).to_f %>
+          <% total = (totals['total'] || totals[:total] || 0).to_f %>
+          <div class="flex justify-between"><span>Subtotal</span><span>$<%= sprintf('%.2f', subtotal) %></span></div>
+          <div class="flex justify-between text-orange-700"><span>Discounts</span><span>-$<%= sprintf('%.2f', discount) %></span></div>
+          <div class="flex justify-between font-semibold text-gray-900"><span>Total</span><span>$<%= sprintf('%.2f', total) %></span></div>
+        </div>
+      </div>
+      <div class="mt-4">
+        <% if ENV['STRIPE_SECRET_KEY'].present? %>
+          <%= button_to "Pay now", payments_create_session_path,
+                method: :post,
+                form: { data: { turbo: false } },
+                params: { amount_cents: (totals.values.first.to_f * 100).to_i, name: 'Bundle', success_url: root_url + '?paid=1', cancel_url: root_url + '?canceled=1' },
+                class: "w-full px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded text-base font-medium" %>
+        <% else %>
+          <button type="button" class="w-full px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded text-base font-medium" onclick="alert('Demo payment: no API key configured')">Pay now</button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+ 
+</div>
+
+

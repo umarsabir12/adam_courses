@@ -5,8 +5,8 @@ module Api
     protect_from_forgery with: :null_session
 
     def session
-      body = params.permit(:currency, :locale, payload: {})
-      payload = body[:payload] || {}
+      body = params.permit(:currency, :locale, payload: {}, checkout: { payload: {} })
+      payload = body[:payload] || body.dig(:checkout, :payload) || {}
 
       signer = Bundle::HmacSigner.new(secret: hmac_secret)
       signature = payload[:signature] || payload['signature']
@@ -41,6 +41,7 @@ module Api
       redirect_url = "/checkout/redirect/#{session_id}"
 
       render json: { sessionId: session_id, redirectUrl: redirect_url }
+      return
     end
 
     private

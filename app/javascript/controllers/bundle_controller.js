@@ -124,28 +124,39 @@ export default class extends Controller {
         ? `Add 2 courses → save ${percent}% + ${giftAllowed} gift.`
         : `Choose 2–3 courses to unlock big savings and free gifts.`
 
-    this.progressTarget.textContent = courseCount === 0
-      ? 'No courses added — add 2 to unlock discounts + gifts.'
-      : courseCount === 1
-        ? '1 course added — add 1 more for Tier 1 benefits.'
-        : `${courseCount} courses added.`
+    if (courseCount === 0) {
+      this.progressTarget.textContent = 'No courses added — add 2 to unlock discounts + gifts.'
+    } else {
+      const courseLabel = courseCount === 1 ? 'Course' : 'Courses'
+      const giftLabel = giftAllowed === 1 ? 'free gift' : 'free gifts'
+      this.progressTarget.textContent = `${courseCount} ${courseLabel} selected: ${percent}% off + ${giftAllowed} ${giftLabel}`
+    }
 
     // Line items
     this.lineItemsTarget.innerHTML = ''
     if (r) {
+      let addedGiftHeader = false
       r.items.forEach(li => {
         const liEl = document.createElement('li')
-        liEl.className = 'py-2 flex items-center justify-between gap-2'
+        const isGift = !!li.isGift
+        liEl.className = `py-2 flex items-center justify-between gap-2 ${isGift ? 'bg-emerald-50/60' : ''}`
         const price = li.isGift ? '$0.00' : `$${li.net.toFixed(2)}`
         const msrp = li.discount > 0 ? `<span class="line-through text-gray-400 mr-1">$${li.msrp.toFixed(2)}</span>` : ''
         const disc = li.discount > 0 ? `<span class="text-orange-700 mr-1">- $${li.discount.toFixed(2)}</span>` : ''
         liEl.innerHTML = `
           <div>
-            <div class="text-sm">${li.title}</div>
-            <div class="text-xs text-gray-500">${li.badges.join(', ')}</div>
+            <div class="text-sm ${isGift ? 'text-emerald-800' : ''}">${li.title}</div>
+            <div class="text-xs ${isGift ? 'text-emerald-700' : 'text-gray-500'}">${li.badges.join(', ')}</div>
           </div>
-          <div class="text-sm">${msrp}${disc}<strong>${price}</strong></div>
+          <div class="text-sm ${isGift ? 'text-emerald-800' : ''}">${msrp}${disc}<strong>${price}</strong></div>
         `
+        if (isGift && !addedGiftHeader) {
+          const header = document.createElement('li')
+          header.className = 'pt-3 pb-1 text-xs font-semibold text-emerald-800'
+          header.textContent = 'Gifts'
+          this.lineItemsTarget.appendChild(header)
+          addedGiftHeader = true
+        }
         this.lineItemsTarget.appendChild(liEl)
       })
       const subtotal = r.totals.subtotal || 0
@@ -208,17 +219,15 @@ export default class extends Controller {
 
   proceed = async () => {
     if (!this.result) return
-    const payload = this.result
-    const res = await fetch('/api/checkout/session', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ payload })
+    // Post payload to server to render review page, not Stripe
+    const res = await fetch('/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ payload: this.result })
     })
-    const data = await res.json()
-    if (data.redirectUrl) {
-      window.location.href = data.redirectUrl
-    } else if (data.error) {
-      alert(data.error)
-    }
+    if (res.ok) window.location.href = '/checkout'
+    else alert('Unable to proceed to checkout')
   }
 
   debounce(fn, delay) {

@@ -1,0 +1,45 @@
+<div class="container mx-auto px-4 py-6">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-semibold text-gray-900">Checkout</h1>
+    <%= link_to "Back to Bundle Builder", bundle_path, class: "text-orange-700 hover:text-orange-800" %>
+  </div>
+
+  <% if @courses.empty? %>
+    <div class="p-4 bg-yellow-50 border border-yellow-200 rounded text-yellow-800">
+      No courses found. Please sync from WooCommerce first.
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <% @courses.each do |course| %>
+      <div class="bg-white rounded-xl shadow-sm border border-orange-200 overflow-hidden">
+        <% if course.image_url.present? %>
+          <img src="<%= course.image_url %>" alt="<%= course.name %>" class="w-full h-40 object-cover">
+        <% else %>
+          <div class="w-full h-40 bg-gray-100"></div>
+        <% end %>
+        <div class="p-3">
+          <div class="font-semibold leading-snug"><%= course.name %></div>
+          <% if course.sku.present? %>
+            <div class="text-xs text-gray-500 mt-0.5">SKU: <%= course.sku %></div>
+          <% end %>
+          <div class="mt-2 flex items-center justify-between">
+            <div class="text-sm font-medium">$<%= number_with_precision(course.price.to_f, precision: 2) %></div>
+            <%= button_to "Pay", payments_create_session_path,
+                  method: :post,
+                  form: { data: { turbo: false } },
+                  params: {
+                    amount_cents: (course.price.to_f * 100).to_i,
+                    name: course.name,
+                    success_url: payments_url + '?paid=1',
+                    cancel_url: payments_url + '?canceled=1'
+                  },
+                  class: "px-3 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded text-sm" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
